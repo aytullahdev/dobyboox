@@ -30,7 +30,14 @@ async function run(){
             const result = await userCollection.findOne(querry);
             
             res.send(result);
-            console.log(result);
+        })
+        app.post('/update',async(req,res)=>{
+            const id = req.body._id;
+            const newquan = req.body.quan;
+            const querry={_id:ObjectId(id)};
+            const newvalue = {$set: {quan:newquan}};
+            const result = await userCollection.updateOne(querry,newvalue);
+            res.send(result);
         })
 
     }finally{
