@@ -1,5 +1,6 @@
 const express = require('express');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const port = process.env.PORT || 5000;
 const cors = require('cors');
 require('dotenv').config()
 const app = express();
@@ -46,7 +47,7 @@ async function run(){
 }
 
 run().catch(console.dir);
-app.listen(5000,()=>{
+app.listen(port,()=>{
     console.log("Server is working");
     
 })
