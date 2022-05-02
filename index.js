@@ -40,6 +40,11 @@ async function run(){
             const result = await userCollection.updateOne(querry,newvalue);
             res.send(result);
         })
+        app.delete('/products',async(req,res)=>{
+            const querry={_id: ObjectId(req.body._id)};
+            const result = await userCollection.deleteOne(querry);
+            res.send(result);
+        })
 
     }finally{
 
