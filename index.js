@@ -32,6 +32,13 @@ async function run(){
             
             res.send(result);
         })
+        app.get('/productsby/:id',async(req,res)=>{
+            
+            const querry={supplier: req.params.id};
+            const cursor =  userCollection.find(querry);
+            const result = await cursor.toArray()
+            res.send(result);
+        })
         app.post('/update',async(req,res)=>{
             const id = req.body._id;
             const newquan = req.body.quan;
