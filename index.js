@@ -18,7 +18,7 @@ function verifyJWT(req,res,next){
     token = authhead.split(' ')[1];
     jwt.verify(token,process.env.ACC_TOKEN,(err,decoded)=>{
         if(err){
-            return res.status(403).send({message:"Unvalid User"});
+            return res.status(401).send({message:"Unvalid User"});
         }
         req.decode=decoded;
        
@@ -41,7 +41,7 @@ async function run(){
         // Add Product
         app.post('/addproduct',verifyJWT,async(req,res)=>{
             const tempdata=req.body;
-            if(req.decode.email!==tempdata.supplier) return res.status(403);
+            if(req.decode.email!==tempdata.supplier) return res.status(401);
             const data = {name:tempdata.pname,price:tempdata.pprice,quan:tempdata.pquan,supplier:tempdata.psupplier,img:tempdata.pimg,desc:tempdata.pdesc}
             const result = await userCollection.insertOne(data);
             res.send(result);
@@ -66,7 +66,7 @@ async function run(){
             
             const querry={supplier: req.params.id};
             
-            if(req.decode.email!==req.params.id) return res.status(403);
+            if(req.decode.email!==req.params.id) return res.status(401);
             const cursor =  userCollection.find(querry);
             const result = await cursor.toArray()
             res.send(result);
@@ -76,7 +76,7 @@ async function run(){
             const id = req.body._id;
             const newdetails = req.body;
             const querry={_id:ObjectId(id)};
-            if(req.decode.email!==req.body.supplier) return res.status(403);
+            if(req.decode.email!==req.body.supplier) return res.status(401);
             const newvalue = {$set: {name:newdetails.name,price:newdetails.price,quan:newdetails.quan,img:newdetails.img,desc:newdetails.desc}};
             const result = await userCollection.updateOne(querry,newvalue);
             console.log(newdetails)
@@ -94,7 +94,7 @@ async function run(){
         // Delete a product 
         app.delete('/products',verifyJWT,async(req,res)=>{
             const querry={_id: ObjectId(req.body._id)};
-            if(req.decode.email!==req.body.supplier) return res.status(403);
+            if(req.decode.email!==req.body.supplier) return res.status(401);
             const result = await userCollection.deleteOne(querry);
             res.send(result);
         })
