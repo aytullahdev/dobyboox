@@ -72,11 +72,12 @@ async function run(){
             res.send(result);
         })
         // Update an product
-        app.post('/updates',async(req,res)=>{
+        app.post('/updates',verifyJWT,async(req,res)=>{
             const id = req.body._id;
             const newdetails = req.body;
             const querry={_id:ObjectId(id)};
-            const newvalue = {$set: {name:newdetails.name,price:newdetails.price,quan:newdetails.quan,img:newdetails.img}};
+            if(req.decode.email!==req.body.supplier) return res.status(403);
+            const newvalue = {$set: {name:newdetails.name,price:newdetails.price,quan:newdetails.quan,img:newdetails.img,desc:newdetails.desc}};
             const result = await userCollection.updateOne(querry,newvalue);
             console.log(newdetails)
             res.send(result);
