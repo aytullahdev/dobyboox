@@ -9,6 +9,23 @@ app.use(cors())
 app.use(express.json())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PWD}@cluster0.rph41.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+function verifyJWT(req,res,next){
+    const authhead = req.headers.authorization;
+    console.log("error");
+    if(!authhead){
+        return res.status(401).send({message:"Unauthorized"});
+    }
+    token = authhead.split(' ')[1];
+    jwt.verify(token,process.env.ACC_TOKEN,(err,decoded)=>{
+        if(err){
+            return res.status(403).send({message:"Unvalid User"});
+        }
+        req.decode=decoded;
+       
+    })
+
+    next();
+}
 async function run(){
     try{
         await client.connect();
@@ -22,8 +39,9 @@ async function run(){
             res.send({token:actoken});
         })
         // Add Product
-        app.post('/addproduct',async(req,res)=>{
+        app.post('/addproduct',verifyJWT,async(req,res)=>{
             const tempdata=req.body;
+            if(req.decode.email!==tempdata.supplier) return res.status(403);
             const data = {name:tempdata.pname,price:tempdata.pprice,quan:tempdata.pquan,supplier:tempdata.psupplier,img:tempdata.pimg,desc:tempdata.pdesc}
             const result = await userCollection.insertOne(data);
             res.send(result);
@@ -44,17 +62,20 @@ async function run(){
             res.send(result);
         })
         // Get all product by Supplier Id-> Email
-        app.get('/productsby/:id',async(req,res)=>{
+        app.get('/productsby/:id',verifyJWT,async(req,res)=>{
             
             const querry={supplier: req.params.id};
+            
+            if(req.decode.email!==req.params.id) return res.status(403);
             const cursor =  userCollection.find(querry);
             const result = await cursor.toArray()
             res.send(result);
         })
         // Update an product
-        app.post('/updates',async(req,res)=>{
+        app.post('/updates',verifyJWT,async(req,res)=>{
             const id = req.body._id;
             const newdetails = req.body;
+            if(req.decode.email!==req.body.supplier) return res.status(403);
             const querry={_id:ObjectId(id)};
             const newvalue = {$set: {name:newdetails.name,price:newdetails.price,quan:newdetails.quan,img:newdetails.img}};
             const result = await userCollection.updateOne(querry,newvalue);
@@ -71,8 +92,9 @@ async function run(){
             res.send(result);
         })
         // Delete a product 
-        app.delete('/products',async(req,res)=>{
+        app.delete('/products',verifyJWT,async(req,res)=>{
             const querry={_id: ObjectId(req.body._id)};
+            if(req.decode.email!==req.body.supplier) return res.status(403);
             const result = await userCollection.deleteOne(querry);
             res.send(result);
         })
