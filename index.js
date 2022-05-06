@@ -75,7 +75,6 @@ async function run(){
         app.post('/updates',async(req,res)=>{
             const id = req.body._id;
             const newdetails = req.body;
-            if(req.decode.email!==req.body.supplier) return res.status(403);
             const querry={_id:ObjectId(id)};
             const newvalue = {$set: {name:newdetails.name,price:newdetails.price,quan:newdetails.quan,img:newdetails.img}};
             const result = await userCollection.updateOne(querry,newvalue);
