@@ -11,7 +11,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PWD}@cluster0
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 function verifyJWT(req,res,next){
     const authhead = req.headers.authorization;
-    console.log("error");
+   
     if(!authhead){
         return res.status(401).send({message:"Unauthorized"});
     }
@@ -72,7 +72,7 @@ async function run(){
             res.send(result);
         })
         // Update an product
-        app.post('/updates',verifyJWT,async(req,res)=>{
+        app.post('/updates',async(req,res)=>{
             const id = req.body._id;
             const newdetails = req.body;
             if(req.decode.email!==req.body.supplier) return res.status(403);
