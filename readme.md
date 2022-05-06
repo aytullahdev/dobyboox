@@ -14,3 +14,12 @@
 
 ## User Functiionality with token
     1) /login -> provide a Valide User Token (JWT TOKEN);
+
+# Features 
+    This API provide :-
+    1) Secure API Connection to the server
+    2) User can Add there Data Securely
+    3) Visitor can access All the products Details
+    4) Visitor can't access products By suppliers
+    5) Single supplier can't Update Other supplier Product which is secure by middle ware
+    6) Any user can order product and Restok Product of Any supplier. 
