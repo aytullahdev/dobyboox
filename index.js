@@ -29,10 +29,11 @@ function verifyJWT(req,res,next){
             return res.status(401).send({message:"Unvalid User"});
         }
         req.decode=decoded;
+        next();
        
     })
 
-    next();
+    
 }
 async function run(){
     try{
