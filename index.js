@@ -111,6 +111,12 @@ async function run(){
             const result = await userCollection.deleteOne(querry);
             res.send(result);
         })
+        // Product Count
+        app.get('/productcount',verifyJWT,async(req,res)=>{
+             const querry = req.query.email?{ supplier:req.query.email} : {};
+             const count = await userCollection.find(querry).count();
+             res.send({count});
+        })
 
     }finally{
 
