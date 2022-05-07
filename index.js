@@ -58,7 +58,11 @@ async function run(){
         // Get All products
         app.get('/products',async(req,res)=>{
             const querry={};
-            const cursor = userCollection.find(querry);
+            const lim = parseInt(req.query.limit);
+            let cursor = userCollection.find(querry);
+            if(lim){
+                 cursor = userCollection.find(querry).limit(lim);
+            }
             const products = await cursor.toArray();
             res.send(products);
         })
