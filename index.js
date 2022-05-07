@@ -59,9 +59,15 @@ async function run(){
         app.get('/products',async(req,res)=>{
             const querry={};
             const lim = parseInt(req.query.limit);
+            const page = parseInt(req.query.page)
             let cursor = userCollection.find(querry);
             if(lim){
-                 cursor = userCollection.find(querry).limit(lim);
+                 if(page){
+                    cursor = userCollection.find(querry).skip(lim*page).limit(lim);
+                 }else{
+                    cursor = userCollection.find(querry).limit(lim);
+                 }
+                 
             }
             const products = await cursor.toArray();
             res.send(products);
