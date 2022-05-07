@@ -5,7 +5,12 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 require('dotenv').config()
 const app = express();
-app.use(cors())
+const corsConfig={
+    origin:true,
+    credentials:true,
+};
+app.use(cors(corsConfig))
+app.options('*',cors(corsConfig));
 app.use(express.json())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PWD}@cluster0.rph41.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
