@@ -11,6 +11,8 @@
     6) /products -> Delete a single product (DELETE Request with ID , Secure with MiddleWare)
     ** Add product
         1) /addproduct -> Add a single product to database (POST Request);
+        2) /productcount/?email=ayt.ullah.dev@gmail.com (with email querry parameter)
+        3) /productcount/ -> Return all the product count
 
 ## User Functiionality with token
     1) /login -> provide a Valide User Token (JWT TOKEN);
