@@ -50,7 +50,7 @@ async function run(){
         // Add Product
         app.post('/addproduct',verifyJWT,async(req,res)=>{
             const tempdata=req.body;
-            if(req.decode.email!==tempdata.supplier) return res.status(401);
+            if(req.decode.email!==tempdata.psupplier) return res.status(401);
             const data = {name:tempdata.pname,price:tempdata.pprice,quan:tempdata.pquan,supplier:tempdata.psupplier,img:tempdata.pimg,desc:tempdata.pdesc}
             const result = await userCollection.insertOne(data);
             res.send(result);
