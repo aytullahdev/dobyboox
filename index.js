@@ -83,10 +83,20 @@ async function run(){
         // Get all product by Supplier Id-> Email
         app.get('/productsby/',verifyJWT,async(req,res)=>{
             
-            const querry={supplier: req.body.email};
+            const querry={supplier: req.query.email};
+            const limit = parseInt(req.query.limit);
+            const page = parseInt(req.query.page);
+            let cursor =  userCollection.find(querry);
+            if(req.decode.email!==req.query.email) return res.status(401);
+            if(limit){
+                if(page){
+                   cursor = userCollection.find(querry).skip(limit*page).limit(limit);
+                }else{
+                   cursor = userCollection.find(querry).limit(limit);
+                }
+                
+           }
             
-            if(req.decode.email!==req.body.email) return res.status(401);
-            const cursor =  userCollection.find(querry);
             const result = await cursor.toArray()
             res.send(result);
         })
