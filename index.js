@@ -81,11 +81,11 @@ async function run(){
             res.send(result);
         })
         // Get all product by Supplier Id-> Email
-        app.get('/productsby/:id',verifyJWT,async(req,res)=>{
+        app.get('/productsby/',verifyJWT,async(req,res)=>{
             
-            const querry={supplier: req.params.id};
+            const querry={supplier: req.body.email};
             
-            if(req.decode.email!==req.params.id) return res.status(401);
+            if(req.decode.email!==req.body.email) return res.status(401);
             const cursor =  userCollection.find(querry);
             const result = await cursor.toArray()
             res.send(result);
