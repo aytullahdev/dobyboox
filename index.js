@@ -128,7 +128,7 @@ async function run(){
             res.send(result);
         })
         // Product Count
-        app.get('/productcount',verifyJWT,async(req,res)=>{
+        app.get('/productcount',async(req,res)=>{
              const querry = req.query.email?{ supplier:req.query.email} : {};
              const count = await userCollection.find(querry).count();
              res.send({count});
